@@ -1,0 +1,30 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: '21.7b0'
+    hooks:
+    - id: black
+-   repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.9.2
+    hooks:
+    -   id: isort
+-   repo: https://github.com/PyCQA/bandit
+    rev: '1.7.0'
+    hooks:
+    - id: bandit
+      args: ['--exclude', 'app/tests/*,.venv,venv']
+-   repo: local
+    hooks:
+        - id: mypy
+          name: mypy
+          entry: mypy
+          language: system
+          types: [python]
+          files: app/
+-   repo: local
+    hooks:
+    -   id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        files: app/

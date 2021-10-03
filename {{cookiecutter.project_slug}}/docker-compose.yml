@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+  api:
+    env_file:
+      - .env
+    build: .
+    command: ["/start-reload.sh"]
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "10m"
+
+  db:
+    image: postgres:12
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "10m"
+
+  pgweb:
+    image: sosedoff/pgweb
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PWD}@db:5432/${POSTGRES_DB}?sslmode=disable
+    depends_on:
+      - db
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "10m"
