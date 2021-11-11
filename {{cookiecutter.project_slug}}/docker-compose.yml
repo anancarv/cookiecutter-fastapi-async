@@ -4,7 +4,11 @@ services:
   api:
     env_file:
       - .env
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-false}
     command: ["/start-reload.sh"]
     restart: always
     ports:

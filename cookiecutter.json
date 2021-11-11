@@ -4,6 +4,6 @@
   "github_username": "anancarv",
   "project_name": "My awesome API",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
-  "project_description": "Python template for creating a high quality Python package.",
+  "project_description": "My awesome API.",
   "project_version": "0.1.0"
 }

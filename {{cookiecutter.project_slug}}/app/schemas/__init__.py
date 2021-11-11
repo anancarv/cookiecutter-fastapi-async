@@ -1,10 +1,26 @@
+from typing import Any
+
 from pydantic import BaseModel
 
 from .item import Item, ItemCreate, ItemUpdate
+from .typing import CreateType, ModelType, UpdateType
 
 
 class Message(BaseModel):
     detail: str
 
 
-__all__ = ["Message", "Item", "ItemCreate", "ItemUpdate"]
+class ErrorModel(BaseModel):
+    model_name: str
+    value: Any
+
+
+__all__ = [
+    "Message",
+    "Item",
+    "ItemCreate",
+    "ItemUpdate",
+    "CreateType",
+    "ModelType",
+    "UpdateType",
+]

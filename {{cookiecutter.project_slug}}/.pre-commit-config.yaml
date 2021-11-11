@@ -20,11 +20,7 @@ repos:
           language: system
           types: [python]
           files: app/
--   repo: local
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 4.0.1
     hooks:
-    -   id: pylint
-        name: pylint
-        entry: pylint
-        language: system
-        types: [python]
-        files: app/
+      - id: flake8

@@ -3,7 +3,7 @@ from asyncpg.exceptions import UniqueViolationError
 
 from app import crud
 from app.db import database
-from app.exception import ItemNotFoundException
+from app.exceptions import ModelNotFoundException
 from app.schemas.item import ItemCreate, ItemUpdate
 from app.tests.utils import random_lower_string
 
@@ -51,7 +51,7 @@ async def test_get_item_success() -> None:
 async def test_get_item_fail_item_not_found() -> None:
     item_id = 150
 
-    with pytest.raises(ItemNotFoundException):
+    with pytest.raises(ModelNotFoundException):
         stored_item = await crud.item.get(database, item_id)
 
         assert stored_item is None
@@ -66,7 +66,7 @@ async def test_update_item_success() -> None:
 
     new_name = random_lower_string()
     item_in_2 = ItemUpdate(name=new_name)
-    updated_item = await crud.item.update(database, item, item_in_2)
+    updated_item = await crud.item.update(database, item_in_2, item.id)
 
     assert updated_item
     assert item.id == updated_item.id
@@ -84,6 +84,6 @@ async def test_delete_item() -> None:
 
     await crud.item.delete(database, item.id)
 
-    with pytest.raises(ItemNotFoundException):
+    with pytest.raises(ModelNotFoundException):
         item2 = await crud.item.get(database, item.id)
         assert item2 is None
