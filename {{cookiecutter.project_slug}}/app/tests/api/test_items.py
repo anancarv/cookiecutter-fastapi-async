@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db import database
 from app.tests.utils import create_random_item, random_lower_string
 
 
@@ -20,8 +20,8 @@ async def test_create_site(async_client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
-async def test_read_site(async_client: AsyncClient) -> None:
-    item = await create_random_item(database)
+async def test_read_site(async_client: AsyncClient, db_session: AsyncSession) -> None:
+    item = await create_random_item(db_session)
     response = await async_client.get(f"/items/{item.id}")
     assert response.status_code == 200
     content = response.json()

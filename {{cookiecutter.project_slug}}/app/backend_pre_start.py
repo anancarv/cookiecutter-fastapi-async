@@ -3,7 +3,7 @@ import logging
 
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
 
-from app.db import database
+from app.db import async_session
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +22,8 @@ loop = asyncio.get_event_loop()
 async def main() -> None:
     logger.info("Initializing service")
     try:
-        await database.connect()
-        # Try to create session to check if DB is awake
-        await database.execute("SELECT 1")
-        await database.disconnect()
+        async with async_session() as session:
+            await session.execute("SELECT 1")
     except Exception as error:
         logger.error(error)
         raise error

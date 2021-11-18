@@ -11,7 +11,7 @@ class Message(BaseModel):
 
 
 class ErrorModel(BaseModel):
-    model_name: str
+    class_name: str
     value: Any
 
 

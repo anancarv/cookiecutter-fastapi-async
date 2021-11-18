@@ -1,7 +1,4 @@
-import databases
-from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+from .base import Base
+from .session import async_session, engine
 
-from app.core.config import Config
-
-Base: DeclarativeMeta = declarative_base()
-database: databases.core.Database = databases.Database(Config.DATABASE_URL)
+__all__ = ["Base", "engine", "async_session"]

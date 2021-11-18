@@ -2,8 +2,8 @@ from app import models, schemas
 from app.crud.base import CRUDBase
 
 
-class CRUDItem(CRUDBase[schemas.Item, schemas.ItemCreate, schemas.ItemUpdate]):
+class CRUDItem(CRUDBase[models.Item, schemas.ItemCreate, schemas.ItemUpdate]):
     pass
 
 
-item = CRUDItem(models.Item.__table__)
+item = CRUDItem(models.Item)

@@ -3,7 +3,7 @@ import os
 
 class Config:
     DATABASE_URL = (
-        f"postgresql://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PWD']}@"
-        f"db/{os.environ['POSTGRES_DB']}"
+        f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:"
+        f"{os.environ['POSTGRES_PWD']}@db/{os.environ['POSTGRES_DB']}"
     )
     LOGGING_LEVEL = os.getenv("LOGGING_LEVEL", "INFO")

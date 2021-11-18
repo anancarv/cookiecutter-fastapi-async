@@ -1,10 +1,12 @@
 from typing import List, Optional
 
-from asyncpg.exceptions import UniqueViolationError
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from pydantic import parse_obj_as
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.deps import get_db
 from app.crud import item
-from app.db import database
 from app.exceptions import ModelNotFoundException
 from app.schemas import Item, ItemCreate, ItemUpdate, Message
 from app.utils import format_response_headers
@@ -14,26 +16,31 @@ router = APIRouter()
 
 @router.get("/", response_model=List[Item])
 async def read_items(
-    response: Response, offset: Optional[int] = 0, limit: Optional[int] = 100
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+    offset: Optional[int] = 0,
+    limit: Optional[int] = 100,
 ) -> List[Item]:
     """
     Retrieve all items
     """
 
-    items_count = await item.count(database)
+    items_count = await item.count(db)
     format_response_headers(response, items_count)
 
-    return await item.list(database, offset=offset, limit=limit)
+    found_items = await item.list(db, offset=offset, limit=limit)
+    return parse_obj_as(List[Item], found_items)
 
 
 @router.get("/{id}", response_model=Item, responses={404: {"model": Message}})
-async def read_item(*, id: int) -> Item:
+async def read_item(*, db: AsyncSession = Depends(get_db), id: int) -> Item:
     """
     Get item by ID
     """
 
     try:
-        return await item.get(database, id)
+        found_item = await item.get(db, id)
+        return parse_obj_as(Item, found_item)
     except ModelNotFoundException as error:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Item not found"
@@ -46,14 +53,17 @@ async def read_item(*, id: int) -> Item:
     response_model=Item,
     responses={409: {"model": Message}},
 )
-async def create_item(*, item_in: ItemCreate) -> Item:
+async def create_item(
+    *, db: AsyncSession = Depends(get_db), item_in: ItemCreate
+) -> Item:
     """
     Create a item
     """
 
     try:
-        return await item.create(database, item_in)
-    except UniqueViolationError as error:
+        created_item = await item.create(db, item_in)
+        return parse_obj_as(Item, created_item)
+    except IntegrityError as error:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Item already exist"
         ) from error
@@ -64,13 +74,16 @@ async def create_item(*, item_in: ItemCreate) -> Item:
     response_model=Item,
     responses={404: {"model": Message}, 400: {"model": Message}},
 )
-async def update_item(*, id: int, item_in: ItemUpdate) -> Item:
+async def update_item(
+    *, db: AsyncSession = Depends(get_db), id: int, item_in: ItemUpdate
+) -> Item:
     """
     Update an item
     """
 
     try:
-        return await item.update(database, item_in, id)
+        updated_item = await item.update(db, item_in, id)
+        return parse_obj_as(Item, updated_item)
     except ModelNotFoundException as error:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Item not found"
@@ -78,13 +91,13 @@ async def update_item(*, id: int, item_in: ItemUpdate) -> Item:
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_item(*, id: int) -> None:
+async def delete_item(*, db: AsyncSession = Depends(get_db), id: int) -> None:
     """
     Delete an item
     """
 
     try:
-        await item.delete(database, id)
+        await item.delete(db, id)
     except ModelNotFoundException as error:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
