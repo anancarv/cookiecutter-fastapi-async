@@ -11,8 +11,6 @@ services:
         INSTALL_DEV: ${INSTALL_DEV-false}
     command: ["/start-reload.sh"]
     restart: always
-    volumes:
-      - .:/app
     ports:
       - "8080:8080"
     depends_on:
