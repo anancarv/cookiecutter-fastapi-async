@@ -28,6 +28,7 @@ class CRUDBase(Generic[schemas.ModelType, schemas.CreateType, schemas.UpdateType
         db_obj = self._table(**obj_in_data)  # type: ignore
         db.add(db_obj)
         await db.commit()
+        await db.refresh(db_obj)
         return db_obj
 
     async def get(self, db: AsyncSession, obj_id: int) -> schemas.ModelType:
@@ -76,6 +77,7 @@ class CRUDBase(Generic[schemas.ModelType, schemas.CreateType, schemas.UpdateType
 
         db.add(db_obj)
         await db.commit()
+        await db.refresh(db_obj)
 
         logger.debug(f"{self._table.__name__} id={obj_id} successfully updated")
         return db_obj
@@ -83,4 +85,5 @@ class CRUDBase(Generic[schemas.ModelType, schemas.CreateType, schemas.UpdateType
     async def delete(self, db: AsyncSession, obj_id: int) -> None:
         db_obj = await self.get(db, obj_id)
         await db.delete(db_obj)
+        await db.commit()
         logger.debug(f"{self._table.__name__} successfully deleted")

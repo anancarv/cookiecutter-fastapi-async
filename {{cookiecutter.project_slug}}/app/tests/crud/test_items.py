@@ -85,7 +85,6 @@ async def test_delete_item(db_session: AsyncSession) -> None:
     item = await crud.item.create(db_session, item_in)
 
     await crud.item.delete(db_session, item.id)
-    await db_session.commit()
 
     with pytest.raises(ModelNotFoundException):
         item2 = await crud.item.get(db_session, item.id)
