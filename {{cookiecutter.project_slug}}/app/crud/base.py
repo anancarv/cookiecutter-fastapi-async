@@ -29,6 +29,7 @@ class CRUDBase(Generic[schemas.ModelType, schemas.CreateType, schemas.UpdateType
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
+        logger.debug(f"{self._table.__name__} successfully created")
         return db_obj
 
     async def get(self, db: AsyncSession, obj_id: int) -> schemas.ModelType:
