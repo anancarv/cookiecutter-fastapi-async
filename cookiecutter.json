@@ -1,7 +1,7 @@
 {
-  "full_name": "Ananias CARVALHO",
-  "email": "carvalhoananias@example.com",
-  "github_username": "anancarv",
+  "full_name": "Your Name",
+  "email": "you@example.com",
+  "github_username": "your-username",
   "project_name": "My awesome API",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
   "project_description": "My awesome API.",

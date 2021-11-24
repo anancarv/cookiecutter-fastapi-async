@@ -12,9 +12,9 @@ pip install cookiecutter
 Generate a Python package project:
 ```bash
 cookiecutter https://github.com/anancarv/cookiecutter-fastapi-async.git
-full_name [Ananias CARVALHO]:
-email [carvalhoananias@example.com]:
-github_username [anancarv]:
+full_name [Your Name]:
+email [you@example.com]:
+github_username [your-username]:
 ...
 ```
 
