@@ -64,9 +64,11 @@ async def create_item(
         created_item = await item.create(db, item_in)
         return parse_obj_as(Item, created_item)
     except IntegrityError as error:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="Item already exist"
-        ) from error
+        if "duplicate key" in str(error.__cause__):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT, detail="Item already exist"
+            )
+        raise error
 
 
 @router.put(
