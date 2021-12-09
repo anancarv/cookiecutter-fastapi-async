@@ -1,4 +1,4 @@
-# Cookiecutter PyPackage
+# Cookiecutter FastAPI Async
 
 [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template for creating a backend using [FastAPI](https://github.com/tiangolo/fastapi) and SQLAlchemy Async ORM.
 
