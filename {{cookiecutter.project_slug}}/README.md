@@ -23,10 +23,8 @@
 First, create a `.env` file with the following content:
 ```bash
 POSTGRES_USER=<YOUR-POSTGRES-USER>
-POSTGRES_PWD=<YOUR-POSTGRES-PWD>
+POSTGRES_PASSWORD=<YOUR-POSTGRES-PASSWORD>
 POSTGRES_DB=<YOUR-DB-NAME>
-
-LOGGING_LEVEL=INFO
 ```
 
 Then, start the stack with Docker Compose:

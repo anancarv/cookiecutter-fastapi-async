@@ -21,7 +21,7 @@ def upgrade():
         "item",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("name", sa.String(), nullable=False, unique=True),
-        sa.Column("description", sa.String(), nullable=True),
+        sa.Column("description", sa.String()),
         sa.PrimaryKeyConstraint("id"),
     )
 

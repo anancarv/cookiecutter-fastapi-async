@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import parse_obj_as
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,14 +9,12 @@ from app.api.deps import get_db
 from app.crud import item
 from app.exceptions import ModelNotFoundException
 from app.schemas import Item, ItemCreate, ItemUpdate, Message
-from app.utils import format_response_headers
 
 router = APIRouter()
 
 
 @router.get("/", response_model=List[Item])
 async def read_items(
-    response: Response,
     db: AsyncSession = Depends(get_db),
     offset: Optional[int] = 0,
     limit: Optional[int] = 100,
@@ -24,9 +22,6 @@ async def read_items(
     """
     Retrieve all items
     """
-
-    items_count = await item.count(db)
-    format_response_headers(response, items_count)
 
     found_items = await item.list(db, offset=offset, limit=limit)
     return parse_obj_as(List[Item], found_items)
