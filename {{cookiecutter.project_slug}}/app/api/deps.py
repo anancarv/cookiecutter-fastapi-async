@@ -19,3 +19,4 @@ async def get_db() -> AsyncSession:
         except SQLAlchemyError:
             logger.error("Transaction failed, rolling back")
             await session.rollback()
+            raise
