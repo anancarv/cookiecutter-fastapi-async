@@ -54,7 +54,9 @@ class CRUDBase(Generic[schemas.ModelType, schemas.CreateType, schemas.UpdateType
         if clauses is None:
             clauses = []
 
-        query = select(self._table).where(and_(True, *clauses)).offset(offset).limit(limit)
+        query = (
+            select(self._table).where(and_(True, *clauses)).offset(offset).limit(limit)
+        )
         results = await db.execute(query)
 
         logger.debug(f"List all {self._table.__name__} successful")
