@@ -44,7 +44,7 @@ SQLAlchemy = "^1.4.27"
 asyncpg = "^0.25.0"
 tenacity = "^8.0.1"
 psycopg2-binary = "^2.9.1"
-httpx = "^0.20.0"
+httpx = "^0.23.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
